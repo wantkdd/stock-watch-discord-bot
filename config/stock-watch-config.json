@@ -1,0 +1,485 @@
+{
+  "metadata": {
+    "created_at": "2026-05-28T01:18:00+09:00",
+    "timezone": "Asia/Seoul",
+    "manual_only": true,
+    "broker_boundary": "Mirae M-STOCK manual checklist only; no API, no credentials, no account access, no app/browser automation, no order placement."
+  },
+  "risk_controls": {
+    "capital_krw": 1000000,
+    "early_drawdown_stop_krw": -50000,
+    "hard_drawdown_stop_krw": -100000,
+    "default_on_data_failure": "WAIT"
+  },
+  "data_quality": {
+    "max_age_hours": 36,
+    "max_reference_deviation_pct": 30,
+    "missing_data_action": "DATA_MISSING",
+    "proxy_fall_basis": "from_open"
+  },
+  "notifications": {
+    "macos_enabled": false,
+    "minimum_severity": "REVIEW"
+  },
+  "symbols": [
+    {
+      "symbol": "091160",
+      "name": "KODEX 반도체",
+      "market": "KR",
+      "source": "naver",
+      "currency": "KRW",
+      "role": "Korea semi core",
+      "output_type": "TRADE_CANDIDATE",
+      "enabled": true,
+      "reference_price": 163570,
+      "max_position_krw": 327140,
+      "candidate_zones": [
+        [
+          0,
+          163000
+        ],
+        [
+          166000,
+          170000
+        ]
+      ],
+      "add_zones": [
+        [
+          0,
+          158000
+        ]
+      ],
+      "stop": {
+        "type": "price",
+        "price": 152000
+      },
+      "trim": [
+        {
+          "price": 176000,
+          "label": "first_trim"
+        },
+        {
+          "price": 185000,
+          "label": "trailing_review"
+        }
+      ],
+      "manual_qualifiers": [
+        "급등 추격 아님",
+        "지지 확인"
+      ],
+      "exact_triggers": {
+        "first_buy_at_or_below": 163000,
+        "add_buy_at_or_below": 158000,
+        "stop_at_or_below": 152000,
+        "first_trim_at_or_above": 176000,
+        "second_trim_at_or_above": 185000,
+        "breakout_buy_at_or_above": 166000,
+        "breakout_chase_stop_above": 170000,
+        "breakout_note": "166,000원 이상 돌파 확인 시 1주 검토; 170,000원 초과는 추격 금지",
+        "first_buy_shares": 1,
+        "add_buy_shares": 1,
+        "breakout_buy_shares": 1,
+        "first_trim_shares": 1,
+        "second_trim_action": "잔여 1주 보유 시 185,000원 이상에서 전량/트레일링 검토"
+      }
+    },
+    {
+      "symbol": "381180",
+      "name": "TIGER 미국필라델피아반도체나스닥",
+      "market": "KR",
+      "source": "naver",
+      "currency": "KRW",
+      "role": "US semi KR ETF",
+      "output_type": "TRADE_CANDIDATE",
+      "enabled": true,
+      "reference_price": 50735,
+      "max_position_krw": 152205,
+      "candidate_zones": [
+        [
+          0,
+          50500
+        ],
+        [
+          52500,
+          55000
+        ]
+      ],
+      "add_zones": [
+        [
+          0,
+          49000
+        ]
+      ],
+      "stop": {
+        "type": "price",
+        "price": 46800
+      },
+      "trim": [
+        {
+          "price": 55000,
+          "label": "first_trim"
+        },
+        {
+          "price": 58000,
+          "label": "second_trim"
+        }
+      ],
+      "requires_proxy_symbols": [
+        "SOXX",
+        "SMH"
+      ],
+      "proxy_max_fall_from_open_pct": -2,
+      "manual_qualifiers": [
+        "SOXX/SMH가 시초가 대비 -2%보다 더 빠지지 않았는지 확인"
+      ],
+      "exact_triggers": {
+        "first_buy_at_or_below": 50500,
+        "add_buy_at_or_below": 49000,
+        "stop_at_or_below": 46800,
+        "first_trim_at_or_above": 55000,
+        "second_trim_at_or_above": 58000,
+        "breakout_buy_at_or_above": 52500,
+        "breakout_chase_stop_above": 55000,
+        "breakout_note": "52,500원 이상 돌파 확인 시 1주 검토; 55,000원 이상은 신규매수보다 익절/축소 구간",
+        "first_buy_shares": 2,
+        "add_buy_shares": 1,
+        "breakout_buy_shares": 1,
+        "first_trim_shares": 1,
+        "second_trim_action": "잔여 1~2주 보유 시 58,000원 이상에서 절반/전량 축소 검토"
+      }
+    },
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "market": "US",
+      "source": "stooq",
+      "currency": "USD",
+      "role": "small satellite",
+      "output_type": "TRADE_CANDIDATE",
+      "enabled": false,
+      "reference_price": 209.18,
+      "max_position_krw": 70000,
+      "candidate_zones": [
+        [
+          200,
+          210
+        ]
+      ],
+      "add_zones": [
+        [
+          195,
+          200
+        ],
+        [
+          215,
+          9999
+        ]
+      ],
+      "stop": {
+        "type": "price",
+        "price": 190
+      },
+      "trim": [
+        {
+          "price": 230,
+          "label": "first_trim"
+        },
+        {
+          "price": 240,
+          "label": "second_trim"
+        }
+      ],
+      "requires_proxy_symbols": [
+        "SOXX",
+        "SMH",
+        "USD/KRW"
+      ],
+      "proxy_max_fall_from_open_pct": -2,
+      "manual_qualifiers": [
+        "한국장 전용 모드에서 제외"
+      ],
+      "internal_only": true
+    },
+    {
+      "symbol": "005930",
+      "name": "삼성전자",
+      "market": "KR",
+      "source": "naver",
+      "currency": "KRW",
+      "role": "replacement only",
+      "output_type": "REPLACEMENT_ONLY",
+      "enabled": true,
+      "reference_price": 307000,
+      "max_position_krw": 307000,
+      "candidate_zones": [
+        [
+          300000,
+          307000
+        ]
+      ],
+      "add_zones": [],
+      "stop": {
+        "type": "price",
+        "price": 285000
+      },
+      "trim": [
+        {
+          "price": 330000,
+          "label": "first_trim"
+        },
+        {
+          "price": 345000,
+          "label": "second_trim"
+        }
+      ],
+      "manual_qualifiers": [
+        "KODEX 반도체와 동시 과다보유 금지"
+      ],
+      "exact_triggers": {
+        "replacement_buy_at_or_below": 305000,
+        "stop_at_or_below": 285000,
+        "first_trim_at_or_above": 330000,
+        "second_trim_at_or_above": 345000
+      }
+    },
+    {
+      "symbol": "042700",
+      "name": "한미반도체",
+      "market": "KR",
+      "source": "naver",
+      "currency": "KRW",
+      "role": "aggressive watch only",
+      "output_type": "WATCH_ONLY",
+      "enabled": true,
+      "reference_price": 319000,
+      "max_position_krw": 319000,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "percent_from_user_avg",
+        "pct": -8
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "기본안 제외",
+        "1주 비중 큼",
+        "사용자가 별도 평균가 입력 전 자동 후보 금지"
+      ],
+      "exact_triggers": {
+        "watch_only_review_at_or_below": 310000
+      }
+    },
+    {
+      "symbol": "390390",
+      "name": "KODEX 미국반도체",
+      "market": "KR",
+      "source": "naver",
+      "currency": "KRW",
+      "role": "381180 replacement",
+      "output_type": "REPLACEMENT_ONLY",
+      "enabled": true,
+      "reference_price": 61845,
+      "max_position_krw": 185535,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "manual"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "381180 대체 후보; 둘 중 하나만"
+      ],
+      "exact_triggers": {
+        "replacement_buy_at_or_below": 61500
+      }
+    },
+    {
+      "symbol": "000660",
+      "name": "SK하이닉스",
+      "market": "KR",
+      "source": "naver",
+      "currency": "KRW",
+      "role": "context only",
+      "output_type": "DATA_CONTEXT",
+      "enabled": true,
+      "reference_price": 2243000,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "1주가 원금 초과; 직접 후보 제외"
+      ]
+    },
+    {
+      "symbol": "SMH",
+      "name": "VanEck Semiconductor ETF",
+      "market": "US",
+      "source": "stooq",
+      "currency": "USD",
+      "role": "US semi proxy",
+      "output_type": "PROXY_ONLY",
+      "enabled": true,
+      "reference_price": 586.38,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "SOXX와 함께 미국 반도체 위험 프록시"
+      ],
+      "internal_only": true
+    },
+    {
+      "symbol": "SOXX",
+      "name": "iShares Semiconductor ETF",
+      "market": "US",
+      "source": "stooq",
+      "currency": "USD",
+      "role": "US semi proxy",
+      "output_type": "PROXY_ONLY",
+      "enabled": true,
+      "reference_price": 553.83,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "SMH와 함께 미국 반도체 위험 프록시"
+      ],
+      "internal_only": true
+    },
+    {
+      "symbol": "SPY",
+      "name": "S&P 500 ETF",
+      "market": "US",
+      "source": "stooq",
+      "currency": "USD",
+      "role": "US broad proxy",
+      "output_type": "PROXY_ONLY",
+      "enabled": false,
+      "reference_price": 749.14,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "미국 broad risk context"
+      ],
+      "internal_only": true
+    },
+    {
+      "symbol": "QQQ",
+      "name": "Nasdaq 100 ETF",
+      "market": "US",
+      "source": "stooq",
+      "currency": "USD",
+      "role": "US growth proxy",
+      "output_type": "PROXY_ONLY",
+      "enabled": false,
+      "reference_price": 725.97,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "미국 growth risk context"
+      ],
+      "internal_only": true
+    },
+    {
+      "symbol": "USD/KRW",
+      "name": "USD/KRW",
+      "market": "FX",
+      "source": "stooq",
+      "currency": "KRW",
+      "role": "FX context",
+      "output_type": "DATA_CONTEXT",
+      "enabled": false,
+      "reference_price": 1499.83,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "미국 직접투자 환율 확인"
+      ],
+      "internal_only": true
+    },
+    {
+      "symbol": "KOSPI",
+      "name": "KOSPI",
+      "market": "KR_INDEX",
+      "source": "naver_index",
+      "currency": "KRW",
+      "role": "Korea broad context",
+      "output_type": "DATA_CONTEXT",
+      "enabled": true,
+      "reference_price": 8228.7,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "한국 broad market context"
+      ]
+    },
+    {
+      "symbol": "KOSDAQ",
+      "name": "KOSDAQ",
+      "market": "KR_INDEX",
+      "source": "naver_index",
+      "currency": "KRW",
+      "role": "Korea growth context",
+      "output_type": "DATA_CONTEXT",
+      "enabled": true,
+      "reference_price": 1133.13,
+      "max_position_krw": 0,
+      "candidate_zones": [],
+      "add_zones": [],
+      "stop": {
+        "type": "none"
+      },
+      "trim": [],
+      "manual_qualifiers": [
+        "한국 growth market context"
+      ]
+    }
+  ],
+  "automation": {
+    "email_enabled": false,
+    "email_to": "ryusangwan12@gmail.com",
+    "email_mode": "draft_only_until_user_configures_sender",
+    "recommended_report_times_kst": [
+      "09:05 KR pre/open check",
+      "15:20 KR close/stop check",
+      "22:35 US open check",
+      "04:55 US close/stop check"
+    ],
+    "broker": "Mirae M-STOCK manual execution only",
+    "mode": "KR_MARKET_ONLY",
+    "discord_schedule_kst": "Every Korean market hour: 09:05, 10:05, 11:05, 12:05, 13:05, 14:05, 15:05, 15:25 on weekdays",
+    "report_focus": "Korean-listed instruments only; US direct stocks hidden; US semiconductor ETFs may be used only as internal risk proxies for Korea-listed US semiconductor ETF signals."
+  }
+}
