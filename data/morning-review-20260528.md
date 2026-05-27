@@ -2,9 +2,10 @@
 
 ## 결론
 - risk_mode: caution
-- Gemini API key missing: 가격감시는 계속, LLM 판단은 비활성.
+- Gemini 실패: HTTP Error 503: Service Unavailable. 가격감시는 계속.
 
 ## 메모
+- Gemini failed: HTTP Error 503: Service Unavailable
 - Gemini key missing; headline-only fallback
 
 ## 주요 헤드라인

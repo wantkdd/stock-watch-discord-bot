@@ -2,6 +2,7 @@
   "date": "2026-05-28",
   "risk_mode": "caution",
   "notes": [
+    "Gemini failed: HTTP Error 503: Service Unavailable",
     "Gemini key missing; headline-only fallback"
   ],
   "symbol_overrides": {
