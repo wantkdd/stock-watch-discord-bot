@@ -1,0 +1,59 @@
+{
+  "date": "2026-05-28",
+  "risk_mode": "caution",
+  "notes": [
+    "Gemini key missing; headline-only fallback"
+  ],
+  "symbol_overrides": {
+    "091160": {
+      "disable_buy": false,
+      "notes": []
+    },
+    "381180": {
+      "disable_buy": false,
+      "notes": []
+    }
+  },
+  "sources": [
+    {
+      "title": "SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5",
+      "published": "Wed, 27 May 2026 04:59:16 GMT"
+    },
+    {
+      "title": "SK하이닉스·삼성전자 급등에도 HBM 장비주는 급락…반도체 시장 ‘온도차’ 왜 커졌나 - CBC뉴스",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5namJ0TDNRQk80eGVnanYxZldaVmhNYVZ6a0swY00xc3ZQeS1FV3BQaGdMbVBNTVpnQzhEYm10TE1TbWZRVUZubENJVUVGbk5JaUZobWNhZDBZX0dYMjdXaXJfZlZ3eUJ4?oc=5",
+      "published": "Wed, 27 May 2026 05:11:26 GMT"
+    },
+    {
+      "title": "SK하이닉스, 시총 1조달러 넘었다 - 조선일보",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOMXQtaDNoTmxTUFBTQUF3T19NU0dZb29pcUZMOVc4T2VBZVV4RVNWRUkwZmp2MUViU3pfNFB5SFc3VERNZUVIaTRfWEQzRDQ0dUhUQ25ZRUI4VVZtS1phZUdGU3NrWG9weGRBM013ZDJnSnFPUXQ5dVZEUXhSX2dTQ2ZOay1iRTJROTBxMFRR?oc=5",
+      "published": "Wed, 27 May 2026 15:54:00 GMT"
+    },
+    {
+      "title": "SK하이닉스도 ‘1조달러 클럽’ 진입…삼성전자 이어 국내 두 번째·글로벌 12위 - 이코노미트리뷴",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBNYVZ3MDJ5NVJMNGM3Y3YzQUk4QXRITktRYVFURVQ2ai1NYVFtVjVTNDRscnplUXE5VVc5NmtWZ2llcFBRVDZ6bVhSY2ZEYjJIWTBmN25nVWJmMVJZSDhGUFVlaGF4R3JXRkZkakp2LWVFdmxCYzI4?oc=5",
+      "published": "Wed, 27 May 2026 01:13:41 GMT"
+    },
+    {
+      "title": "KODEX 반도체(091160) - 매일경제 마켓",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFAwS3hhMzFLNFA1ZTc5ZmxMT01kMFl0U3RsOHVpSGx3MVNmQzFXTmFrQjc3WFZQTWNTRENSN2J4Rlc0SFl6bjBoeFFEMVlRbTBBajBOOXJjTHl1Zw?oc=5",
+      "published": "Sun, 30 Apr 2023 20:53:51 GMT"
+    },
+    {
+      "title": "삼성운용, 'KODEX 반도체타겟위클리커버드콜' 신규 상장 - 파이낸셜뉴스",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9ZMEFfUy13SXQxRXo0RUZfemJJTXp5SzRJWTB0NXBLV3J3aHp2eE1vbnhta0NZNEJhc3pHckNCNGdVNi1uaE85cGF4aG9zcEs1VkNiblQ2a2N2QQ?oc=5",
+      "published": "Mon, 11 May 2026 07:00:00 GMT"
+    },
+    {
+      "title": "KODEX 반도체(091160) - 매일경제 마켓",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFB1YWJ4TkdySDRfNUlYQ3U5cTBpRE5JcmtzdjIwQnVsWUVpU0MwT2UzOUxyVUpoa0ZIM2tESnlwa1BsenZKcHhVazd1R0dXeG5pVVl5cVdrVDRlS2tRMUlBYg?oc=5",
+      "published": "Fri, 08 Mar 2024 00:56:20 GMT"
+    },
+    {
+      "title": "증권 - 매일경제TV",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9YSUVZUzBGR2dmdFNTT2g0Wi1QbGRZYzBnYzE2TldiN2xsOW5ROWZlaXZNb0R5MVllVDR4QTFUNUpCM2ozdWd0N0ZxVEFpVkpKb09hOWpnbUNVT1pfdW5Xdmh2dS1kUQ?oc=5",
+      "published": "Fri, 22 May 2026 06:30:00 GMT"
+    }
+  ]
+}
