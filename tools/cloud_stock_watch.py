@@ -306,13 +306,29 @@ def gemini_review(api_key: str, market_json: str, headlines_json: str) -> Dict[s
 헤드라인:
 {headlines_json}
 """
-    url=f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={urllib.parse.quote(api_key)}"
+    # Use a small/fast model first to reduce 503 overload risk; fall back across stable Flash models.
+    configured = os.environ.get('GEMINI_MODEL', '').strip()
+    candidates = [m for m in [configured, 'gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash'] if m]
     body={"contents":[{"parts":[{"text":prompt}]}],"generationConfig":{"temperature":0.2,"responseMimeType":"application/json"}}
-    req=urllib.request.Request(url, data=json.dumps(body).encode('utf-8'), headers={"Content-Type":"application/json"}, method='POST')
-    with urllib.request.urlopen(req, timeout=45) as resp:
-        data=json.loads(resp.read().decode('utf-8'))
-    text=data['candidates'][0]['content']['parts'][0]['text']
-    return json.loads(text)
+    last_error = None
+    for model in dict.fromkeys(candidates):
+        url=f"https://generativelanguage.googleapis.com/v1beta/models/{urllib.parse.quote(model)}:generateContent?key={urllib.parse.quote(api_key)}"
+        for attempt in range(3):
+            req=urllib.request.Request(url, data=json.dumps(body).encode('utf-8'), headers={"Content-Type":"application/json"}, method='POST')
+            try:
+                with urllib.request.urlopen(req, timeout=45) as resp:
+                    data=json.loads(resp.read().decode('utf-8'))
+                text=data['candidates'][0]['content']['parts'][0]['text']
+                parsed=json.loads(text)
+                parsed['_gemini_model']=model
+                return parsed
+            except Exception as e:
+                last_error = e
+                # 503/temporary backend errors often clear with a short retry; 404/400 will fall through to next candidate.
+                if attempt < 2:
+                    import time
+                    time.sleep(2 ** attempt)
+    raise RuntimeError(f"Gemini failed after model fallbacks: {last_error}")
 
 
 def morning(webhook: str, api_key: str) -> int:
@@ -328,7 +344,10 @@ def morning(webhook: str, api_key: str) -> int:
     if api_key:
         try:
             g=gemini_review(api_key, market_json, headlines_json)
-            overlay.update({"risk_mode":g.get('risk_mode','caution'),"notes":g.get('notes',[])[:5],"symbol_overrides":g.get('symbol_overrides', overlay['symbol_overrides']),"sources":headlines[:10]})
+            notes=list(g.get('notes',[])[:5])
+            if g.get('_gemini_model'):
+                notes.insert(0, f"Gemini model: {g['_gemini_model']}")
+            overlay.update({"risk_mode":g.get('risk_mode','caution'),"notes":notes,"symbol_overrides":g.get('symbol_overrides', overlay['symbol_overrides']),"sources":headlines[:10]})
             summary=str(g.get('summary',''))
         except Exception as e:
             overlay['notes'].insert(0, f"Gemini failed: {e}")
