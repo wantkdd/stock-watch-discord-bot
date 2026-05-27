@@ -3,22 +3,20 @@
   "risk_mode": "caution",
   "notes": [
     "Gemini model: gemini-2.5-flash-lite",
-    "KODEX 반도체(091160)는 'outside configured zones' 상태로 신규 매수 보류.",
-    "TIGER 미국필라델피아반도체나스닥(381180)은 SOXX 하락 및 프록시 게이트 실패로 신규 매수 보류."
+    "091160: KODEX 반도체는 'WAIT' 신호이며, 'outside configured zones'라는 노트가 있어 신규 매수 시 주의가 필요합니다.",
+    "381180: TIGER 미국필라델피아반도체나스닥은 'WAIT' 신호이나, 'SOXX from open -4.18%', 'SOXX fell below gate -2.00%', 'proxy gate failed' 등의 부정적인 노트가 있어 신규 매수 시 높은 위험이 따릅니다."
   ],
   "symbol_overrides": {
     "091160": {
       "disable_buy": true,
       "notes": [
-        "outside configured zones"
+        "외부 설정 구간 이탈로 신규 매수 보류"
       ]
     },
     "381180": {
       "disable_buy": true,
       "notes": [
-        "SOXX from open -4.07%",
-        "SOXX fell below gate -2.00%",
-        "proxy gate failed"
+        "미국 필라델피아 반도체 지수 하락 및 게이트 이탈, 프록시 게이트 실패로 신규 매수 보류"
       ]
     }
   },

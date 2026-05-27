@@ -2,12 +2,12 @@
 
 ## 결론
 - risk_mode: caution
-- 두 종목 모두 현재 신규 매수 불가 상태입니다. 091160은 설정된 존을 벗어났고, 381180은 미국 반도체 ETF(SOXX)의 하락 및 관련 지표 실패로 인해 위험 신호가 감지되었습니다. 관망하며 시장 상황을 지켜봐야 합니다.
+- 091160과 381180 모두 신규 매수 허용 불가. 091160은 외부 설정 구간 이탈, 381180은 미국 반도체 지수의 하락세 및 관련 지표들의 부정적인 신호로 인해 매수 위험이 높아 보류합니다.
 
 ## 메모
 - Gemini model: gemini-2.5-flash-lite
-- KODEX 반도체(091160)는 'outside configured zones' 상태로 신규 매수 보류.
-- TIGER 미국필라델피아반도체나스닥(381180)은 SOXX 하락 및 프록시 게이트 실패로 신규 매수 보류.
+- 091160: KODEX 반도체는 'WAIT' 신호이며, 'outside configured zones'라는 노트가 있어 신규 매수 시 주의가 필요합니다.
+- 381180: TIGER 미국필라델피아반도체나스닥은 'WAIT' 신호이나, 'SOXX from open -4.18%', 'SOXX fell below gate -2.00%', 'proxy gate failed' 등의 부정적인 노트가 있어 신규 매수 시 높은 위험이 따릅니다.
 
 ## 주요 헤드라인
 - [SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net](https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5)
