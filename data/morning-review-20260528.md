@@ -2,11 +2,12 @@
 
 ## 결론
 - risk_mode: caution
-- Gemini 실패: HTTP Error 503: Service Unavailable. 가격감시는 계속.
+- 두 종목 모두 현재 신규 매수 불가 상태입니다. 091160은 설정된 존을 벗어났고, 381180은 미국 반도체 ETF(SOXX)의 하락 및 관련 지표 실패로 인해 위험 신호가 감지되었습니다. 관망하며 시장 상황을 지켜봐야 합니다.
 
 ## 메모
-- Gemini failed: HTTP Error 503: Service Unavailable
-- Gemini key missing; headline-only fallback
+- Gemini model: gemini-2.5-flash-lite
+- KODEX 반도체(091160)는 'outside configured zones' 상태로 신규 매수 보류.
+- TIGER 미국필라델피아반도체나스닥(381180)은 SOXX 하락 및 프록시 게이트 실패로 신규 매수 보류.
 
 ## 주요 헤드라인
 - [SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net](https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5)

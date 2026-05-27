@@ -2,17 +2,24 @@
   "date": "2026-05-28",
   "risk_mode": "caution",
   "notes": [
-    "Gemini failed: HTTP Error 503: Service Unavailable",
-    "Gemini key missing; headline-only fallback"
+    "Gemini model: gemini-2.5-flash-lite",
+    "KODEX 반도체(091160)는 'outside configured zones' 상태로 신규 매수 보류.",
+    "TIGER 미국필라델피아반도체나스닥(381180)은 SOXX 하락 및 프록시 게이트 실패로 신규 매수 보류."
   ],
   "symbol_overrides": {
     "091160": {
-      "disable_buy": false,
-      "notes": []
+      "disable_buy": true,
+      "notes": [
+        "outside configured zones"
+      ]
     },
     "381180": {
-      "disable_buy": false,
-      "notes": []
+      "disable_buy": true,
+      "notes": [
+        "SOXX from open -4.07%",
+        "SOXX fell below gate -2.00%",
+        "proxy gate failed"
+      ]
     }
   },
   "sources": [
@@ -55,6 +62,16 @@
       "title": "증권 - 매일경제TV",
       "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9YSUVZUzBGR2dmdFNTT2g0Wi1QbGRZYzBnYzE2TldiN2xsOW5ROWZlaXZNb0R5MVllVDR4QTFUNUpCM2ozdWd0N0ZxVEFpVkpKb09hOWpnbUNVT1pfdW5Xdmh2dS1kUQ?oc=5",
       "published": "Fri, 22 May 2026 06:30:00 GMT"
+    },
+    {
+      "title": "\"반도체가 육천피 시동\"… 개인·외국인 ‘코스피 상승’ 베팅 - 파이낸셜뉴스",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1nUm5MUnZZWXpoQm44VUFVTEpMbG1WUXhMRHdkV29LUkFnbDkxRXdBNnRHdjZuUmtzOVllM1NqRlViYm5oaWdnR2xHTldXVWNYRWxULXUwTVMtZ9IBXkFVX3lxTE9laU42ak1zWDgxT20yQ3JycmlIdGxiN1JhWXhVTDg5NzhlS1J5N0hUeHFLVTFkNVdmLW9BUXNTMlRneGdTcGJkNlFOSjNfZjFYR3U2NjJTeXljdndvRGc?oc=5",
+      "published": "Sun, 22 Mar 2026 07:00:00 GMT"
+    },
+    {
+      "title": "TIGER 미국필라델피아반도체나스닥(381180) - 매일경제 마켓",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9hYnpKYUFpdjdOaEhnQ3l4RV9INjRiQThZcWh1azEzZ1gyeTdKVFNYTmZmUURabWxpUURJeTI3X0tyYUFiSXpfdWo4aER1RFVrZm05ZWxFdzVWZw?oc=5",
+      "published": "Tue, 02 May 2023 00:01:41 GMT"
     }
   ]
 }
