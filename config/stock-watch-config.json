@@ -479,7 +479,7 @@
     ],
     "broker": "Mirae M-STOCK manual execution only",
     "mode": "KR_MARKET_ONLY",
-    "discord_schedule_kst": "Every Korean market hour: 09:05, 10:05, 11:05, 12:05, 13:05, 14:05, 15:05, 15:25 on weekdays",
+    "discord_schedule_kst": "Every Korean market hour: 09:07, 09:17, 10:17, 11:17, 12:17, 13:17, 14:17, 15:17, 15:27 on weekdays",
     "report_focus": "Korean-listed instruments only; US direct stocks hidden; US semiconductor ETFs may be used only as internal risk proxies for Korea-listed US semiconductor ETF signals."
   }
 }

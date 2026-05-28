@@ -12,18 +12,19 @@ on:
           - morning
           - watch
   schedule:
-    # 08:40 KST Mon-Fri = 23:40 UTC Sun-Thu: LLM morning review
-    - cron: '40 23 * * 0-4'
-    # 09:00, 09:05, hourly during KR regular session, and 15:25 KST Mon-Fri
-    - cron: '0 0 * * 1-5'
-    - cron: '5 0 * * 1-5'
-    - cron: '5 1 * * 1-5'
-    - cron: '5 2 * * 1-5'
-    - cron: '5 3 * * 1-5'
-    - cron: '5 4 * * 1-5'
-    - cron: '5 5 * * 1-5'
-    - cron: '5 6 * * 1-5'
-    - cron: '25 6 * * 1-5'
+    # 08:43 KST Mon-Fri = 23:43 UTC Sun-Thu: LLM morning review.
+    # Avoid exact :00/:05/:40 slots because GitHub scheduled workflows can be delayed under load.
+    - cron: '43 23 * * 0-4'
+    # 09:07, 09:17, hourly at :17, and 15:27 KST Mon-Fri.
+    - cron: '7 0 * * 1-5'
+    - cron: '17 0 * * 1-5'
+    - cron: '17 1 * * 1-5'
+    - cron: '17 2 * * 1-5'
+    - cron: '17 3 * * 1-5'
+    - cron: '17 4 * * 1-5'
+    - cron: '17 5 * * 1-5'
+    - cron: '17 6 * * 1-5'
+    - cron: '27 6 * * 1-5'
 
 permissions:
   contents: write
@@ -48,7 +49,7 @@ jobs:
         run: |
           mode="${{ github.event.inputs.mode }}"
           if [[ -z "$mode" ]]; then
-            if [[ "${{ github.event.schedule }}" == "40 23 * * 0-4" ]]; then
+            if [[ "${{ github.event.schedule }}" == "43 23 * * 0-4" || "${{ github.event.schedule }}" == "40 23 * * 0-4" ]]; then
               mode="morning"
             else
               mode="watch"

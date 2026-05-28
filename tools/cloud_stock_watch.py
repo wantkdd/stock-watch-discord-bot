@@ -354,9 +354,22 @@ def morning(webhook: str, api_key: str) -> int:
             summary=f"Gemini 실패: {e}. 가격감시는 계속."
     DATA.mkdir(exist_ok=True)
     (DATA/'morning-overlay.json').write_text(json.dumps(overlay, ensure_ascii=False, indent=2)+"\n")
+    adjusted_results=apply_overlay(results, overlay)
+    checklist=discord_summary(adjusted_results)
     md=DATA/f"morning-review-{today.replace('-','')}.md"
-    md.write_text(f"# Morning LLM Review — {today}\n\n## 결론\n- risk_mode: {overlay['risk_mode']}\n- {summary}\n\n## 메모\n" + '\n'.join(f"- {n}" for n in overlay.get('notes',[])) + "\n\n## 주요 헤드라인\n" + '\n'.join(f"- [{h['title']}]({h['url']})" for h in headlines[:12]) + "\n")
+    md.write_text(
+        f"# Morning LLM Review — {today}\n\n"
+        f"## 결론\n- risk_mode: {overlay['risk_mode']}\n- {summary}\n\n"
+        "## 오늘 수동 가격 체크표\n"
+        f"{checklist}\n\n"
+        "## 메모\n"
+        + '\n'.join(f"- {n}" for n in overlay.get('notes',[]))
+        + "\n\n## 주요 헤드라인\n"
+        + '\n'.join(f"- [{h['title']}]({h['url']})" for h in headlines[:12])
+        + "\n"
+    )
     send_discord(webhook, f"Morning LLM Review — {today}", md.read_text(), 3447003)
+    send_discord(webhook, f"Morning Price Checklist — {today}", checklist, 3066993)
     return 0
 
 
