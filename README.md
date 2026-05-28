@@ -19,8 +19,9 @@ Public GitHub Actions version of a no-order Korean stock watch bot.
 GitHub scheduled workflows can be delayed by runner availability. The workflow
 therefore avoids the most crowded exact `:00`/`:05` minute slots, and the morning
 LLM message also includes the concrete “what/price/size” checklist. Intraday
-watch alerts fetch current Google News RSS headlines and, when `GEMINI_API_KEY`
-is configured, run the same conservative LLM risk check before sending.
+watch alerts include current price, day-change trend, KOSPI/KOSDAQ context,
+SOXX/SMH risk-proxy trend, current Google News RSS headlines, and, when
+`GEMINI_API_KEY` is configured, the same conservative LLM risk check before sending.
 
 GitHub Actions cron is UTC, so the workflow file stores converted UTC schedules.
 

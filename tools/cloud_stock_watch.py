@@ -37,6 +37,8 @@ class Quote:
     symbol: str
     price: Optional[float]
     open: Optional[float] = None
+    change: Optional[float] = None
+    change_pct: Optional[float] = None
     market_date: Optional[str] = None
     captured_at: str = ""
     source: str = ""
@@ -67,6 +69,16 @@ def parse_yyyymmdd_dot(text: Optional[str]) -> Optional[str]:
     return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else None
 
 
+def signed_by_marker(value: Optional[float], text: str) -> Optional[float]:
+    if value is None:
+        return None
+    if any(marker in text for marker in ['no_down', 'quotient dn', '-']):
+        return -abs(value)
+    if any(marker in text for marker in ['no_up', 'quotient up', '+']):
+        return abs(value)
+    return value
+
+
 def naver_equity(symbol: str, currency: str) -> Quote:
     url = f"https://finance.naver.com/item/main.naver?code={symbol}"
     try:
@@ -79,8 +91,16 @@ def naver_equity(symbol: str, currency: str) -> Quote:
             return Quote(symbol, None, captured_at=now_iso(), source=url, currency=currency, error="missing naver price")
         dm = re.search(r'<em class="date">\s*(\d{4}\.\d{2}\.\d{2})', text)
         md = parse_yyyymmdd_dot(dm.group(1) if dm else None)
+        rate_block = re.search(r'<div class="rate_info".*?</div>\s*</div>', text, re.S)
+        rate_text = rate_block.group(0) if rate_block else text
+        dds = re.findall(r'<dd>(.*?)</dd>', rate_text, re.S)
+        change = parse_number(re.search(r'([0-9,]+(?:\.\d+)?)', re.sub('<.*?>', ' ', dds[1])).group(1)) if len(dds) > 1 and re.search(r'([0-9,]+(?:\.\d+)?)', re.sub('<.*?>', ' ', dds[1])) else None
+        pct_match = re.search(r'([+-]?[0-9,]+(?:\.\d+)?)\s*%', re.sub('<.*?>', ' ', dds[2]) if len(dds) > 2 else rate_text)
+        change_pct = parse_number(pct_match.group(1)) if pct_match else None
+        change = signed_by_marker(change, rate_text)
+        change_pct = signed_by_marker(change_pct, rate_text)
         err = None if md else "source market_date unavailable"
-        return Quote(symbol, price, market_date=md, captured_at=now_iso(), source=url, currency=currency, error=err)
+        return Quote(symbol, price, change=change, change_pct=change_pct, market_date=md, captured_at=now_iso(), source=url, currency=currency, error=err)
     except Exception as e:
         return Quote(symbol, None, captured_at=now_iso(), source=url, currency=currency, error=str(e))
 
@@ -94,9 +114,16 @@ def naver_index(symbol: str, currency: str) -> Quote:
             text = resp.read().decode("euc-kr", errors="replace")
         m = re.search(r'<em id="now_value">\s*([0-9,.]+)\s*</em>', text)
         price = parse_number(m.group(1) if m else None)
+        ch = re.search(r'id="change_value_and_rate".*?<span>([0-9,.]+)</span>\s*([+-]?[0-9,.]+)%', text, re.S)
+        change = parse_number(ch.group(1)) if ch else None
+        change_pct = parse_number(ch.group(2)) if ch else None
+        quotient = re.search(r'<div class="quotient\s+([^"]*)"', text)
+        marker = (quotient.group(0) if quotient else '') + (ch.group(0) if ch else '')
+        change = signed_by_marker(change, marker)
+        change_pct = signed_by_marker(change_pct, marker)
         dm = re.search(r'<span id="time">\s*(\d{4}\.\d{2}\.\d{2})', text)
         md = parse_yyyymmdd_dot(dm.group(1) if dm else None)
-        return Quote(symbol, price, market_date=md, captured_at=now_iso(), source=url, currency=currency, error=None if price and md else "missing index data")
+        return Quote(symbol, price, change=change, change_pct=change_pct, market_date=md, captured_at=now_iso(), source=url, currency=currency, error=None if price and md else "missing index data")
     except Exception as e:
         return Quote(symbol, None, captured_at=now_iso(), source=url, currency=currency, error=str(e))
 
@@ -292,6 +319,103 @@ def headline_summary(headlines: List[Dict[str,str]], limit: int=5) -> str:
     return '\n'.join(rows) or '- 뉴스 조회 결과 없음'
 
 
+def pct_change(current: Optional[float], base: Optional[float]) -> Optional[float]:
+    if current is None or base in {None, 0}:
+        return None
+    return (current-float(base))/float(base)*100
+
+
+def fmt_pct(value: Optional[float]) -> str:
+    if value is None:
+        return "n/a"
+    return f"{value:+.2f}%"
+
+
+def fmt_price(value: Optional[float], currency: str="") -> str:
+    if value is None:
+        return "-"
+    return f"{value:,.0f}{currency}" if abs(value) >= 100 else f"{value:,.2f}{currency}"
+
+
+def trend_label(pct: Optional[float]) -> str:
+    if pct is None:
+        return "추세 n/a"
+    if pct <= -3:
+        return "급락/위험"
+    if pct <= -1:
+        return "하락"
+    if pct >= 3:
+        return "급등/추격주의"
+    if pct >= 1:
+        return "상승"
+    return "보합권"
+
+
+def build_market_context(config: Dict[str,Any], quotes: Dict[str,Quote], results: List[Dict[str,Any]]) -> Dict[str,Any]:
+    by_sig={r['symbol']:r for r in results}
+    trade=[]; market=[]; proxies=[]
+    for s in config['symbols']:
+        if not s.get('enabled', True):
+            continue
+        sym=s['symbol']; q=quotes.get(sym); r=by_sig.get(sym, {})
+        price=q.price if q else None
+        item={
+            "symbol":sym,
+            "name":s.get('name',''),
+            "price":price,
+            "currency":s.get('currency',''),
+            "signal":r.get('signal','WAIT'),
+            "day_change_pct":q.change_pct if q else None,
+            "day_change":q.change if q else None,
+            "vs_reference_pct":pct_change(price, parse_number(s.get('reference_price'))),
+            "notes":r.get('notes',[])[:4],
+        }
+        ex=s.get('exact_triggers',{})
+        if s.get('output_type')=='TRADE_CANDIDATE':
+            item.update({
+                "first_buy_at_or_below":ex.get('first_buy_at_or_below'),
+                "add_buy_at_or_below":ex.get('add_buy_at_or_below'),
+                "breakout_buy_at_or_above":ex.get('breakout_buy_at_or_above'),
+                "stop_at_or_below":ex.get('stop_at_or_below'),
+                "price_zone": (
+                    "add_buy_zone" if price is not None and ex.get('add_buy_at_or_below') is not None and price <= float(ex['add_buy_at_or_below'])
+                    else "first_buy_zone" if price is not None and ex.get('first_buy_at_or_below') is not None and price <= float(ex['first_buy_at_or_below'])
+                    else "breakout_zone" if price is not None and ex.get('breakout_buy_at_or_above') is not None and price >= float(ex['breakout_buy_at_or_above'])
+                    else "outside_buy_zone"
+                ),
+            })
+            trade.append(item)
+        elif s.get('output_type') in {'DATA_CONTEXT','WATCH_ONLY','REPLACEMENT_ONLY'} and sym in {'KOSPI','KOSDAQ','005930','042700','390390','000660'}:
+            market.append(item)
+        elif s.get('output_type')=='PROXY_ONLY':
+            item["from_open_pct"]=pct_change(price, q.open if q else None)
+            proxies.append(item)
+    return {"as_of_kst":now_kst().isoformat(timespec='seconds'),"trade_candidates":trade,"market_context":market,"risk_proxies":proxies}
+
+
+def market_context_summary(context: Dict[str,Any]) -> str:
+    lines=[]
+    for item in context.get('trade_candidates',[]):
+        cur=item.get('currency','')
+        lines.append(
+            f"- {item['symbol']} {item['name']}: 현재 {fmt_price(item.get('price'), cur)}, "
+            f"전일대비 {fmt_pct(item.get('day_change_pct'))}({trend_label(item.get('day_change_pct'))}), "
+            f"기준가대비 {fmt_pct(item.get('vs_reference_pct'))}, 구간 {item.get('price_zone')}, 판단 {item.get('signal')}"
+        )
+    for item in context.get('market_context',[]):
+        if item['symbol'] in {'KOSPI','KOSDAQ'}:
+            lines.append(
+                f"- {item['symbol']}: {fmt_price(item.get('price'))}, 전일대비 {fmt_pct(item.get('day_change_pct'))}({trend_label(item.get('day_change_pct'))})"
+            )
+    for item in context.get('risk_proxies',[]):
+        if item['symbol'] in {'SOXX','SMH'}:
+            lines.append(
+                f"- {item['symbol']} proxy: {fmt_price(item.get('price'), item.get('currency',''))}, "
+                f"시초가대비 {fmt_pct(item.get('from_open_pct'))}({trend_label(item.get('from_open_pct'))})"
+            )
+    return '\n'.join(lines) or '- 시장/추세 데이터 없음'
+
+
 def send_discord(webhook: str, title: str, description: str, color: int=3066993) -> None:
     payload={"username":"Stock Watch Bot","content":"📈 **주식 감시 리포트** — 주문 없는 조건 확인표","embeds":[{"title":title,"description":description[:4000],"color":color}]}
     req=urllib.request.Request(webhook, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers={"Content-Type":"application/json","User-Agent":"cloud-stock-watch/1.0"}, method='POST')
@@ -315,11 +439,13 @@ def news_rss(query: str, limit: int=5) -> List[Dict[str,str]]:
 def gemini_review(api_key: str, market_json: str, headlines_json: str) -> Dict[str,Any]:
     prompt=f"""
 한국어로만 답하라. 너는 보수적인 한국장 반도체 매매 리스크 리뷰어다.
-아래 최신 가격/헤드라인을 보고 091160, 381180 신규매수 허용 여부를 판단하라.
+아래 장중 현재가, 전일대비 추세, 기준가대비 위치, KOSPI/KOSDAQ 시장상황,
+SOXX/SMH 프록시 추세, 최신 헤드라인을 모두 함께 보고 091160, 381180 신규매수 허용 여부를 판단하라.
+아침 판단에 고정되지 말고 매 실행 시점의 현재가·시장상황·추세·뉴스를 다시 평가하라.
 자동주문/수익보장/강한 매수지시 금지. bullish해도 조건 완화 금지. 위험하면 disable_buy=true.
 반드시 JSON만 반환하라. 스키마:
 {{"risk_mode":"normal|caution|risk_off|pause_all","notes":["..."],"symbol_overrides":{{"091160":{{"disable_buy":false,"notes":[]}},"381180":{{"disable_buy":false,"notes":[]}}}},"summary":"짧은 결론"}}
-가격:
+장중 시장/가격/추세:
 {market_json}
 헤드라인:
 {headlines_json}
@@ -352,7 +478,8 @@ def gemini_review(api_key: str, market_json: str, headlines_json: str) -> Dict[s
 def morning(webhook: str, api_key: str) -> int:
     config=load_config(); quotes=fetch_quotes(config); results=evaluate(config,quotes)
     headlines=latest_headlines()
-    market_json=json.dumps([{k:v for k,v in r.items() if k in {'symbol','name','signal','price','currency','notes'}} for r in results], ensure_ascii=False)
+    context=build_market_context(config, quotes, results)
+    market_json=json.dumps(context, ensure_ascii=False)
     headlines_json=json.dumps(headlines, ensure_ascii=False)
     today=now_kst().date().isoformat()
     overlay={"date":today,"risk_mode":"caution","notes":["Gemini key missing; headline-only fallback"],"symbol_overrides":{"091160":{"disable_buy":False,"notes":[]},"381180":{"disable_buy":False,"notes":[]}},"sources":headlines[:8]}
@@ -376,6 +503,8 @@ def morning(webhook: str, api_key: str) -> int:
     md.write_text(
         f"# Morning LLM Review — {today}\n\n"
         f"## 결론\n- risk_mode: {overlay['risk_mode']}\n- {summary}\n\n"
+        "## 현재가·시장·추세\n"
+        f"{market_context_summary(context)}\n\n"
         "## 오늘 수동 가격 체크표\n"
         f"{checklist}\n\n"
         "## 메모\n"
@@ -392,10 +521,11 @@ def morning(webhook: str, api_key: str) -> int:
 def watch(webhook: str, api_key: str) -> int:
     config=load_config(); quotes=fetch_quotes(config); raw_results=evaluate(config,quotes)
     headlines=latest_headlines()
+    context=build_market_context(config, quotes, raw_results)
     intraday_notes=["Intraday news RSS checked"]
     intraday_overlay={"date":now_kst().date().isoformat(),"risk_mode":"normal","notes":intraday_notes,"symbol_overrides":{"091160":{"disable_buy":False,"notes":[]},"381180":{"disable_buy":False,"notes":[]}},"sources":headlines[:8]}
     if api_key:
-        market_json=json.dumps([{k:v for k,v in r.items() if k in {'symbol','name','signal','price','currency','notes'}} for r in raw_results], ensure_ascii=False)
+        market_json=json.dumps(context, ensure_ascii=False)
         headlines_json=json.dumps(headlines, ensure_ascii=False)
         try:
             g=gemini_review(api_key, market_json, headlines_json)
@@ -415,7 +545,11 @@ def watch(webhook: str, api_key: str) -> int:
     report.write_text(json.dumps(results, ensure_ascii=False, indent=2)+"\n")
     news_block=headline_summary(headlines)
     llm_block='; '.join(intraday_overlay.get('notes',[])[:3]) or '-'
-    desc=f"{discord_summary(results)}\n\n**실시간 뉴스/LLM 체크** risk_mode `{intraday_overlay.get('risk_mode','normal')}`\n> {llm_block}\n{news_block}"
+    desc=(
+        f"{discord_summary(results)}\n\n"
+        f"**현재가·시장·추세**\n{market_context_summary(context)}\n\n"
+        f"**실시간 뉴스/LLM 체크** risk_mode `{intraday_overlay.get('risk_mode','normal')}`\n> {llm_block}\n{news_block}"
+    )
     send_discord(webhook, f"Stock Watch — {now_kst().strftime('%Y-%m-%d %H:%M KST')}", desc)
     return 0
 
