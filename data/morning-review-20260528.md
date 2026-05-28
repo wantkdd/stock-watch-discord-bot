@@ -1,19 +1,20 @@
 # Morning LLM Review — 2026-05-28
 
 ## 결론
-- risk_mode: caution
-- 091160과 381180 모두 신규 매수 허용 불가. 091160은 외부 설정 구간 이탈, 381180은 미국 반도체 지수의 하락세 및 관련 지표들의 부정적인 신호로 인해 매수 위험이 높아 보류합니다.
+- risk_mode: normal
+- 091160은 수동 검토 필요로 신규 매수 보류, 381180은 부정적 신호 다수 발생으로 신규 매수 불가. 전반적으로 보수적인 접근 필요.
 
 ## 메모
 - Gemini model: gemini-2.5-flash-lite
-- 091160: KODEX 반도체는 'WAIT' 신호이며, 'outside configured zones'라는 노트가 있어 신규 매수 시 주의가 필요합니다.
-- 381180: TIGER 미국필라델피아반도체나스닥은 'WAIT' 신호이나, 'SOXX from open -4.18%', 'SOXX fell below gate -2.00%', 'proxy gate failed' 등의 부정적인 노트가 있어 신규 매수 시 높은 위험이 따릅니다.
+- KODEX 반도체(091160)는 BUY_CANDIDATE 신호이나, 'manual review only' 조건이 붙어있어 신규 매수 허용 전 추가 검토 필요.
+- TIGER 미국필라델피아반도체나스닥(381180)은 WAIT 신호이며, SOXX 하락 및 프록시 게이트 실패 등 부정적인 신호가 다수 관찰됨. 신규 매수 부적합.
+- 미국 반도체 ETF (SMH, SOXX) 관련 헤드라인에서 최근 하락세 및 변동성 확대가 관찰됨. 이는 381180에도 부정적인 영향을 줄 수 있음.
 
 ## 주요 헤드라인
-- [SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net](https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5)
-- [SK하이닉스·삼성전자 급등에도 HBM 장비주는 급락…반도체 시장 ‘온도차’ 왜 커졌나 - CBC뉴스](https://news.google.com/rss/articles/CBMiaEFVX3lxTE5namJ0TDNRQk80eGVnanYxZldaVmhNYVZ6a0swY00xc3ZQeS1FV3BQaGdMbVBNTVpnQzhEYm10TE1TbWZRVUZubENJVUVGbk5JaUZobWNhZDBZX0dYMjdXaXJfZlZ3eUJ4?oc=5)
+- ['HBM 올인' 삼성·SK 비상… 미·일 낸드 연합 45억 달러 역습의 전말 - 글로벌이코노믹](https://news.google.com/rss/articles/CBMiiAFBVV95cUxPYjVadGR4X1F1X280UTRvaktqWFdERjFveDhlR3dyVEpSaS04Q3R5STdiNkctMDU5c1JYQnloX2o3S2dIU1hMZEk4T0NjRVlmaS02NEhzTTN0MGtGZ003akk1NDBQYzhGWVB2N2VxSzU5ZGl5eEt6aHJvUTU2ZTY0NVZGNGxqbk42?oc=5)
 - [SK하이닉스, 시총 1조달러 넘었다 - 조선일보](https://news.google.com/rss/articles/CBMijgFBVV95cUxOMXQtaDNoTmxTUFBTQUF3T19NU0dZb29pcUZMOVc4T2VBZVV4RVNWRUkwZmp2MUViU3pfNFB5SFc3VERNZUVIaTRfWEQzRDQ0dUhUQ25ZRUI4VVZtS1phZUdGU3NrWG9weGRBM013ZDJnSnFPUXQ5dVZEUXhSX2dTQ2ZOay1iRTJROTBxMFRR?oc=5)
-- [SK하이닉스도 ‘1조달러 클럽’ 진입…삼성전자 이어 국내 두 번째·글로벌 12위 - 이코노미트리뷴](https://news.google.com/rss/articles/CBMid0FVX3lxTFBNYVZ3MDJ5NVJMNGM3Y3YzQUk4QXRITktRYVFURVQ2ai1NYVFtVjVTNDRscnplUXE5VVc5NmtWZ2llcFBRVDZ6bVhSY2ZEYjJIWTBmN25nVWJmMVJZSDhGUFVlaGF4R3JXRkZkakp2LWVFdmxCYzI4?oc=5)
+- [SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net](https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5)
+- [SK하이닉스, HBM 발열 잡은 신기술 'iHBM' 공개 - 디일렉](https://news.google.com/rss/articles/CBMiZkFVX3lxTE5RZFpwWlF3X2tabjVMLTNuSW1ZMlRTQ1kzV1UxM3dIM2RQZHgyVDNDZkNwY3VuMVlRSE9ydXNZXzhWenYtYWFWU01Pb0FjNFFEU3c1R3duQ2NzMm5WVjlLMUxZWDV1QQ?oc=5)
 - [KODEX 반도체(091160) - 매일경제 마켓](https://news.google.com/rss/articles/CBMiWkFVX3lxTFAwS3hhMzFLNFA1ZTc5ZmxMT01kMFl0U3RsOHVpSGx3MVNmQzFXTmFrQjc3WFZQTWNTRENSN2J4Rlc0SFl6bjBoeFFEMVlRbTBBajBOOXJjTHl1Zw?oc=5)
 - [삼성운용, 'KODEX 반도체타겟위클리커버드콜' 신규 상장 - 파이낸셜뉴스](https://news.google.com/rss/articles/CBMiWkFVX3lxTE9ZMEFfUy13SXQxRXo0RUZfemJJTXp5SzRJWTB0NXBLV3J3aHp2eE1vbnhta0NZNEJhc3pHckNCNGdVNi1uaE85cGF4aG9zcEs1VkNiblQ2a2N2QQ?oc=5)
 - [KODEX 반도체(091160) - 매일경제 마켓](https://news.google.com/rss/articles/CBMiYEFVX3lxTFB1YWJ4TkdySDRfNUlYQ3U5cTBpRE5JcmtzdjIwQnVsWUVpU0MwT2UzOUxyVUpoa0ZIM2tESnlwa1BsenZKcHhVazd1R0dXeG5pVVl5cVdrVDRlS2tRMUlBYg?oc=5)

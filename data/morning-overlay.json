@@ -1,35 +1,31 @@
 {
   "date": "2026-05-28",
-  "risk_mode": "caution",
+  "risk_mode": "normal",
   "notes": [
     "Gemini model: gemini-2.5-flash-lite",
-    "091160: KODEX 반도체는 'WAIT' 신호이며, 'outside configured zones'라는 노트가 있어 신규 매수 시 주의가 필요합니다.",
-    "381180: TIGER 미국필라델피아반도체나스닥은 'WAIT' 신호이나, 'SOXX from open -4.18%', 'SOXX fell below gate -2.00%', 'proxy gate failed' 등의 부정적인 노트가 있어 신규 매수 시 높은 위험이 따릅니다."
+    "KODEX 반도체(091160)는 BUY_CANDIDATE 신호이나, 'manual review only' 조건이 붙어있어 신규 매수 허용 전 추가 검토 필요.",
+    "TIGER 미국필라델피아반도체나스닥(381180)은 WAIT 신호이며, SOXX 하락 및 프록시 게이트 실패 등 부정적인 신호가 다수 관찰됨. 신규 매수 부적합.",
+    "미국 반도체 ETF (SMH, SOXX) 관련 헤드라인에서 최근 하락세 및 변동성 확대가 관찰됨. 이는 381180에도 부정적인 영향을 줄 수 있음."
   ],
   "symbol_overrides": {
     "091160": {
       "disable_buy": true,
       "notes": [
-        "외부 설정 구간 이탈로 신규 매수 보류"
+        "BUY_CANDIDATE 신호이나, 'manual review only' 조건으로 인해 신규 매수 보류. 추가적인 수동 검토 후 결정 필요."
       ]
     },
     "381180": {
       "disable_buy": true,
       "notes": [
-        "미국 필라델피아 반도체 지수 하락 및 게이트 이탈, 프록시 게이트 실패로 신규 매수 보류"
+        "WAIT 신호이며, SOXX 하락 및 프록시 게이트 실패 등 부정적인 신호가 다수 관찰되어 신규 매수 불가."
       ]
     }
   },
   "sources": [
     {
-      "title": "SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5",
-      "published": "Wed, 27 May 2026 04:59:16 GMT"
-    },
-    {
-      "title": "SK하이닉스·삼성전자 급등에도 HBM 장비주는 급락…반도체 시장 ‘온도차’ 왜 커졌나 - CBC뉴스",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5namJ0TDNRQk80eGVnanYxZldaVmhNYVZ6a0swY00xc3ZQeS1FV3BQaGdMbVBNTVpnQzhEYm10TE1TbWZRVUZubENJVUVGbk5JaUZobWNhZDBZX0dYMjdXaXJfZlZ3eUJ4?oc=5",
-      "published": "Wed, 27 May 2026 05:11:26 GMT"
+      "title": "'HBM 올인' 삼성·SK 비상… 미·일 낸드 연합 45억 달러 역습의 전말 - 글로벌이코노믹",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPYjVadGR4X1F1X280UTRvaktqWFdERjFveDhlR3dyVEpSaS04Q3R5STdiNkctMDU5c1JYQnloX2o3S2dIU1hMZEk4T0NjRVlmaS02NEhzTTN0MGtGZ003akk1NDBQYzhGWVB2N2VxSzU5ZGl5eEt6aHJvUTU2ZTY0NVZGNGxqbk42?oc=5",
+      "published": "Wed, 27 May 2026 22:06:47 GMT"
     },
     {
       "title": "SK하이닉스, 시총 1조달러 넘었다 - 조선일보",
@@ -37,9 +33,14 @@
       "published": "Wed, 27 May 2026 15:54:00 GMT"
     },
     {
-      "title": "SK하이닉스도 ‘1조달러 클럽’ 진입…삼성전자 이어 국내 두 번째·글로벌 12위 - 이코노미트리뷴",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBNYVZ3MDJ5NVJMNGM3Y3YzQUk4QXRITktRYVFURVQ2ai1NYVFtVjVTNDRscnplUXE5VVc5NmtWZ2llcFBRVDZ6bVhSY2ZEYjJIWTBmN25nVWJmMVJZSDhGUFVlaGF4R3JXRkZkakp2LWVFdmxCYzI4?oc=5",
-      "published": "Wed, 27 May 2026 01:13:41 GMT"
+      "title": "SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5",
+      "published": "Wed, 27 May 2026 04:59:16 GMT"
+    },
+    {
+      "title": "SK하이닉스, HBM 발열 잡은 신기술 'iHBM' 공개 - 디일렉",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5RZFpwWlF3X2tabjVMLTNuSW1ZMlRTQ1kzV1UxM3dIM2RQZHgyVDNDZkNwY3VuMVlRSE9ydXNZXzhWenYtYWFWU01Pb0FjNFFEU3c1R3duQ2NzMm5WVjlLMUxZWDV1QQ?oc=5",
+      "published": "Tue, 26 May 2026 06:14:25 GMT"
     },
     {
       "title": "KODEX 반도체(091160) - 매일경제 마켓",
