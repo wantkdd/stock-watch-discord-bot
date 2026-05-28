@@ -13,15 +13,14 @@ Public GitHub Actions version of a no-order Korean stock watch bot.
 ## Schedule, Korea time
 
 - 08:43 — Gemini LLM morning review + same-message price checklist.
-- 09:07 — market-open watch.
-- 09:17 — market-open recheck.
-- 10:17, 11:17, 12:17, 13:17, 14:17, 15:17 — hourly during KR market.
-- 15:27 — pre-close check.
+- 09:00–14:50 — every 10 minutes during KR market.
+- 15:00, 15:10, 15:20, 15:27 — close/pre-close checks.
 
 GitHub scheduled workflows can be delayed by runner availability. The workflow
 therefore avoids the most crowded exact `:00`/`:05` minute slots, and the morning
-LLM message also includes the concrete “what/price/size” checklist so a delayed
-morning review still shows the manual action plan.
+LLM message also includes the concrete “what/price/size” checklist. Intraday
+watch alerts fetch current Google News RSS headlines and, when `GEMINI_API_KEY`
+is configured, run the same conservative LLM risk check before sending.
 
 GitHub Actions cron is UTC, so the workflow file stores converted UTC schedules.
 

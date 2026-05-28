@@ -274,6 +274,24 @@ def discord_summary(results: List[Dict[str,Any]]) -> str:
     return '\n\n'.join(rows)[:3500] or '오늘은 감시 대상 신호가 없습니다.'
 
 
+def latest_headlines() -> List[Dict[str,str]]:
+    headlines=[]
+    for q in ['삼성전자 SK하이닉스 반도체 HBM', 'KODEX 반도체 091160', 'TIGER 미국필라델피아반도체나스닥 381180', 'NVIDIA SOXX SMH semiconductor']:
+        headlines.extend(news_rss(q, 3))
+    return headlines
+
+
+def headline_summary(headlines: List[Dict[str,str]], limit: int=5) -> str:
+    rows=[]
+    for h in headlines[:limit]:
+        title=(h.get('title') or '').strip()
+        if not title:
+            continue
+        published=(h.get('published') or '').strip()
+        rows.append(f"- {title}" + (f" ({published})" if published else ""))
+    return '\n'.join(rows) or '- 뉴스 조회 결과 없음'
+
+
 def send_discord(webhook: str, title: str, description: str, color: int=3066993) -> None:
     payload={"username":"Stock Watch Bot","content":"📈 **주식 감시 리포트** — 주문 없는 조건 확인표","embeds":[{"title":title,"description":description[:4000],"color":color}]}
     req=urllib.request.Request(webhook, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), headers={"Content-Type":"application/json","User-Agent":"cloud-stock-watch/1.0"}, method='POST')
@@ -333,9 +351,7 @@ def gemini_review(api_key: str, market_json: str, headlines_json: str) -> Dict[s
 
 def morning(webhook: str, api_key: str) -> int:
     config=load_config(); quotes=fetch_quotes(config); results=evaluate(config,quotes)
-    headlines=[]
-    for q in ['삼성전자 SK하이닉스 반도체 HBM', 'KODEX 반도체 091160', 'TIGER 미국필라델피아반도체나스닥 381180', 'NVIDIA SOXX SMH semiconductor']:
-        headlines.extend(news_rss(q, 4))
+    headlines=latest_headlines()
     market_json=json.dumps([{k:v for k,v in r.items() if k in {'symbol','name','signal','price','currency','notes'}} for r in results], ensure_ascii=False)
     headlines_json=json.dumps(headlines, ensure_ascii=False)
     today=now_kst().date().isoformat()
@@ -373,12 +389,34 @@ def morning(webhook: str, api_key: str) -> int:
     return 0
 
 
-def watch(webhook: str) -> int:
-    config=load_config(); quotes=fetch_quotes(config); results=apply_overlay(evaluate(config,quotes), load_overlay())
+def watch(webhook: str, api_key: str) -> int:
+    config=load_config(); quotes=fetch_quotes(config); raw_results=evaluate(config,quotes)
+    headlines=latest_headlines()
+    intraday_notes=["Intraday news RSS checked"]
+    intraday_overlay={"date":now_kst().date().isoformat(),"risk_mode":"normal","notes":intraday_notes,"symbol_overrides":{"091160":{"disable_buy":False,"notes":[]},"381180":{"disable_buy":False,"notes":[]}},"sources":headlines[:8]}
+    if api_key:
+        market_json=json.dumps([{k:v for k,v in r.items() if k in {'symbol','name','signal','price','currency','notes'}} for r in raw_results], ensure_ascii=False)
+        headlines_json=json.dumps(headlines, ensure_ascii=False)
+        try:
+            g=gemini_review(api_key, market_json, headlines_json)
+            intraday_notes=list(g.get('notes',[])[:4])
+            if g.get('_gemini_model'):
+                intraday_notes.insert(0, f"Gemini model: {g['_gemini_model']}")
+            intraday_overlay.update({"risk_mode":g.get('risk_mode','caution'),"notes":intraday_notes,"symbol_overrides":g.get('symbol_overrides', intraday_overlay['symbol_overrides'])})
+        except Exception as e:
+            intraday_notes.insert(0, f"Intraday Gemini failed: {e}")
+            intraday_overlay["risk_mode"]="caution"
+            intraday_overlay["notes"]=intraday_notes
+    morning_overlay=load_overlay()
+    results=apply_overlay(raw_results, morning_overlay)
+    results=apply_overlay(results, intraday_overlay)
     DATA.mkdir(exist_ok=True)
     report=DATA/f"daily-signal-{now_kst().strftime('%Y%m%d-%H%M')}.json"
     report.write_text(json.dumps(results, ensure_ascii=False, indent=2)+"\n")
-    send_discord(webhook, f"Stock Watch — {now_kst().strftime('%Y-%m-%d %H:%M KST')}", discord_summary(results))
+    news_block=headline_summary(headlines)
+    llm_block='; '.join(intraday_overlay.get('notes',[])[:3]) or '-'
+    desc=f"{discord_summary(results)}\n\n**실시간 뉴스/LLM 체크** risk_mode `{intraday_overlay.get('risk_mode','normal')}`\n> {llm_block}\n{news_block}"
+    send_discord(webhook, f"Stock Watch — {now_kst().strftime('%Y-%m-%d %H:%M KST')}", desc)
     return 0
 
 
@@ -390,7 +428,7 @@ def main() -> int:
     args=ap.parse_args()
     if not args.discord_webhook:
         print('DISCORD_WEBHOOK_URL missing', file=sys.stderr); return 1
-    return morning(args.discord_webhook, args.gemini_api_key) if args.mode=='morning' else watch(args.discord_webhook)
+    return morning(args.discord_webhook, args.gemini_api_key) if args.mode=='morning' else watch(args.discord_webhook, args.gemini_api_key)
 
 if __name__ == '__main__':
     raise SystemExit(main())

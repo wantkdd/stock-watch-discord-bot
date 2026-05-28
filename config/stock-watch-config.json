@@ -479,7 +479,7 @@
     ],
     "broker": "Mirae M-STOCK manual execution only",
     "mode": "KR_MARKET_ONLY",
-    "discord_schedule_kst": "Every Korean market hour: 09:07, 09:17, 10:17, 11:17, 12:17, 13:17, 14:17, 15:17, 15:27 on weekdays",
-    "report_focus": "Korean-listed instruments only; US direct stocks hidden; US semiconductor ETFs may be used only as internal risk proxies for Korea-listed US semiconductor ETF signals."
+    "discord_schedule_kst": "Every 10 minutes from 09:00 to 14:50 KST, plus 15:00, 15:10, 15:20, 15:27 on Korean weekdays",
+    "report_focus": "Korean-listed instruments only; US direct stocks hidden; US semiconductor ETFs may be used only as internal risk proxies for Korea-listed US semiconductor ETF signals. Intraday watch alerts include current Google News RSS headlines and conservative Gemini risk review when GEMINI_API_KEY is configured."
   }
 }
