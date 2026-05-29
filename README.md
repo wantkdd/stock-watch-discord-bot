@@ -13,11 +13,10 @@ Public GitHub Actions version of a no-order Korean stock watch bot.
 ## Schedule, Korea time
 
 - 08:43 — Gemini LLM morning review + same-message price checklist.
-- 09:00–14:50 — every 10 minutes during KR market.
-- 15:00, 15:10, 15:20, 15:27 — close/pre-close checks.
+- 09:00–15:00 — every hour during KR market.
 
 GitHub scheduled workflows can be delayed by runner availability. The workflow
-therefore avoids the most crowded exact `:00`/`:05` minute slots, and the morning
+therefore may occasionally arrive a few minutes late. The morning
 LLM message also includes the concrete “what/price/size” checklist. Intraday
 watch alerts include current price, day-change trend, KOSPI/KOSDAQ context,
 SOXX/SMH risk-proxy trend, current Google News RSS headlines, and, when

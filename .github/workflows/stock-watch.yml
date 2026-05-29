@@ -15,10 +15,8 @@ on:
     # 08:43 KST Mon-Fri = 23:43 UTC Sun-Thu: LLM morning review.
     # Avoid exact :00/:05/:40 slots because GitHub scheduled workflows can be delayed under load.
     - cron: '43 23 * * 0-4'
-    # Korean regular session watch: every 10 minutes from 09:00-14:50 KST,
-    # then 15:00/15:10/15:20/15:27 KST. Multiple slots reduce missed alerts.
-    - cron: '*/10 0-5 * * 1-5'
-    - cron: '0,10,20,27 6 * * 1-5'
+    # Korean regular session watch: hourly from 09:00 to 15:00 KST.
+    - cron: '0 0-6 * * 1-5'
 
 permissions:
   contents: write
