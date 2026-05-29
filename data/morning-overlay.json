@@ -1,46 +1,45 @@
 {
-  "date": "2026-05-28",
-  "risk_mode": "normal",
+  "date": "2026-05-29",
+  "risk_mode": "caution",
   "notes": [
     "Gemini model: gemini-2.5-flash-lite",
-    "KODEX 반도체(091160)는 BUY_CANDIDATE 신호이나, 'manual review only' 조건이 붙어있어 신규 매수 허용 전 추가 검토 필요.",
-    "TIGER 미국필라델피아반도체나스닥(381180)은 WAIT 신호이며, SOXX 하락 및 프록시 게이트 실패 등 부정적인 신호가 다수 관찰됨. 신규 매수 부적합.",
-    "미국 반도체 ETF (SMH, SOXX) 관련 헤드라인에서 최근 하락세 및 변동성 확대가 관찰됨. 이는 381180에도 부정적인 영향을 줄 수 있음."
+    "KOSPI는 강세, KOSDAQ은 약세로 시장 혼조세.",
+    "미국 반도체 ETF(SOXX, SMH)는 상승 추세이나, 국내 반도체 ETF는 현재 약보합권.",
+    "삼성전자, SK하이닉스 등 대형주는 하락세이며, 특히 삼성전자의 하락폭이 큼.",
+    "최신 헤드라인은 HBM 경쟁 및 SK하이닉스의 시총 상승 관련 내용이 있으나, 단기적인 주가 흐름과는 괴리.",
+    "두 종목 모두 신규 매수 후보이나, 시장 상황 및 개별 종목의 변동성을 고려하여 신중 접근 필요."
   ],
   "symbol_overrides": {
     "091160": {
-      "disable_buy": true,
+      "disable_buy": false,
       "notes": [
-        "BUY_CANDIDATE 신호이나, 'manual review only' 조건으로 인해 신규 매수 보류. 추가적인 수동 검토 후 결정 필요."
+        "현재가 160,280원, 기준가 대비 -2.01% 위치.",
+        "매수 존(first_buy_zone)에 진입하였으나, 시장 전반의 하락세 및 삼성전자 약세 고려하여 분할 매수 관점 유지."
       ]
     },
     "381180": {
-      "disable_buy": true,
+      "disable_buy": false,
       "notes": [
-        "WAIT 신호이며, SOXX 하락 및 프록시 게이트 실패 등 부정적인 신호가 다수 관찰되어 신규 매수 불가."
+        "현재가 50,305원, 기준가 대비 -0.85% 위치.",
+        "SOXX, SMH 프록시의 상승 추세는 긍정적이나, KOSDAQ 시장 약세 및 개별 종목의 하락폭 고려하여 신중 접근."
       ]
     }
   },
   "sources": [
     {
-      "title": "'HBM 올인' 삼성·SK 비상… 미·일 낸드 연합 45억 달러 역습의 전말 - 글로벌이코노믹",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPYjVadGR4X1F1X280UTRvaktqWFdERjFveDhlR3dyVEpSaS04Q3R5STdiNkctMDU5c1JYQnloX2o3S2dIU1hMZEk4T0NjRVlmaS02NEhzTTN0MGtGZ003akk1NDBQYzhGWVB2N2VxSzU5ZGl5eEt6aHJvUTU2ZTY0NVZGNGxqbk42?oc=5",
-      "published": "Wed, 27 May 2026 22:06:47 GMT"
+      "title": "\"이러다 진짜 시총 1등 바뀌나\"…SK하이닉스, 삼성전자 시총 턱밑까지 추격 - 조선일보",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOcllSY2F5X25BSVpteVFoMm5CQUxSRVdyQUZWR3NUZER0elMwcWZtUDh0YUR5NTYyb1JUUXBLbGt2UFExbUFua2NDdFowYmttQ2dIYktUeDB0ZWNyUHBzcWx5N1pBaWdwR0dUTVdWVmo5RUNsSlRlNDFzU3I3Vi1hYQ?oc=5",
+      "published": "Thu, 28 May 2026 23:53:00 GMT"
     },
     {
-      "title": "SK하이닉스, 시총 1조달러 넘었다 - 조선일보",
-      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxOMXQtaDNoTmxTUFBTQUF3T19NU0dZb29pcUZMOVc4T2VBZVV4RVNWRUkwZmp2MUViU3pfNFB5SFc3VERNZUVIaTRfWEQzRDQ0dUhUQ25ZRUI4VVZtS1phZUdGU3NrWG9weGRBM013ZDJnSnFPUXQ5dVZEUXhSX2dTQ2ZOay1iRTJROTBxMFRR?oc=5",
-      "published": "Wed, 27 May 2026 15:54:00 GMT"
+      "title": "SK하이닉스 시총, 삼성전자의 92%…HBM이 격차 좁혔다 - jabon.co.kr",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBGQXZWNVlGemZLNzBhU1htcVI0cTFNM1YzTTJtRVJTc2JUN0Q3LWZFUE1xNUJHZXJPa3JqSlFxT2I2bXNHUDZiTnF3a2o2am9nQ21mazZSa1lyZVpnM3VzNjcyd0V6X3M?oc=5",
+      "published": "Thu, 28 May 2026 23:43:22 GMT"
     },
     {
-      "title": "SK하닉·마이크론 ‘2위의 전쟁’…HBM 타고 나란히 시총 ‘1조달러’ - v.daum.net",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBwQzhWRTJrY0gtdDNGNWhPOXBTdGxpMUVpVjN5aTluU3hVVW5PdnFMSGpFN2ItZ3YydXNySUV4NkJ3MTRxMnNmX2NNTTBUZjQ?oc=5",
-      "published": "Wed, 27 May 2026 04:59:16 GMT"
-    },
-    {
-      "title": "SK하이닉스, HBM 발열 잡은 신기술 'iHBM' 공개 - 디일렉",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5RZFpwWlF3X2tabjVMLTNuSW1ZMlRTQ1kzV1UxM3dIM2RQZHgyVDNDZkNwY3VuMVlRSE9ydXNZXzhWenYtYWFWU01Pb0FjNFFEU3c1R3duQ2NzMm5WVjlLMUxZWDV1QQ?oc=5",
-      "published": "Tue, 26 May 2026 06:14:25 GMT"
+      "title": "HBM 경쟁 '장군멍군'...SK하이닉스 'iHBM' 개발 vs 삼성전자 'HBM4E' 샘플 출하 - 테크M",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9TdVJIYnJmWUdRYWI4Q0Y5NHhyNHg4LVhzZjZyUjA0VXRXdjFHd3hUalNhUnNBVkxTaThfWDlFSkF6amU4anhtZ1NqbVdjUFMzQUNXczBCT2gzRGVaZHNHNFhMT2NyZ9IBakFVX3lxTE1pa0pFTU9YeEtLbEV2Y2MzUFU2c3A1OWlCb3AxWWFxWnJXV1BpYWVrZ0J1M0NFUWtEVHYtVWlFb2kyYU51NGludEFWR3FWWVRaVG9UT3dHbnoxMGhFeVluLXV4cXZxalk0Z0E?oc=5",
+      "published": "Fri, 29 May 2026 00:01:27 GMT"
     },
     {
       "title": "KODEX 반도체(091160) - 매일경제 마켓",
@@ -48,19 +47,14 @@
       "published": "Sun, 30 Apr 2023 20:53:51 GMT"
     },
     {
-      "title": "삼성운용, 'KODEX 반도체타겟위클리커버드콜' 신규 상장 - 파이낸셜뉴스",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9ZMEFfUy13SXQxRXo0RUZfemJJTXp5SzRJWTB0NXBLV3J3aHp2eE1vbnhta0NZNEJhc3pHckNCNGdVNi1uaE85cGF4aG9zcEs1VkNiblQ2a2N2QQ?oc=5",
-      "published": "Mon, 11 May 2026 07:00:00 GMT"
+      "title": "반도체, ETF 수익률도 압도…글로벌 IB도 삼전·닉스 목표주가↑ - 라디오코리아 모바일",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBRcmhHWTJmUllVd2g5RXNlSjFaVVNTc0pILXU5UmNZUThTZEVBSlNJMzYwZS1rdEtZV1hEOXVFbmRZQ0YtRWRTZHBoRi1WelhTaTRuZGctLVBfOXNiSC1IRGFiSTg?oc=5",
+      "published": "Thu, 02 Apr 2026 07:00:00 GMT"
     },
     {
       "title": "KODEX 반도체(091160) - 매일경제 마켓",
       "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFB1YWJ4TkdySDRfNUlYQ3U5cTBpRE5JcmtzdjIwQnVsWUVpU0MwT2UzOUxyVUpoa0ZIM2tESnlwa1BsenZKcHhVazd1R0dXeG5pVVl5cVdrVDRlS2tRMUlBYg?oc=5",
       "published": "Fri, 08 Mar 2024 00:56:20 GMT"
-    },
-    {
-      "title": "증권 - 매일경제TV",
-      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9YSUVZUzBGR2dmdFNTT2g0Wi1QbGRZYzBnYzE2TldiN2xsOW5ROWZlaXZNb0R5MVllVDR4QTFUNUpCM2ozdWd0N0ZxVEFpVkpKb09hOWpnbUNVT1pfdW5Xdmh2dS1kUQ?oc=5",
-      "published": "Fri, 22 May 2026 06:30:00 GMT"
     },
     {
       "title": "\"반도체가 육천피 시동\"… 개인·외국인 ‘코스피 상승’ 베팅 - 파이낸셜뉴스",
@@ -71,6 +65,16 @@
       "title": "TIGER 미국필라델피아반도체나스닥(381180) - 매일경제 마켓",
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9hYnpKYUFpdjdOaEhnQ3l4RV9INjRiQThZcWh1azEzZ1gyeTdKVFNYTmZmUURabWxpUURJeTI3X0tyYUFiSXpfdWo4aER1RFVrZm05ZWxFdzVWZw?oc=5",
       "published": "Tue, 02 May 2023 00:01:41 GMT"
+    },
+    {
+      "title": "미래에셋, ‘TIGER 미국필라델피아반도체나스닥 ETF’ 순자산 2조 원 넘었다…국내 상장 반도체 ETF 중 최대 - 팝콘뉴스",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1xWDFkOWs1VGpObnV4X2xZUTQxQjV2LVp0VXVSaVJUSDBkR0lFc0lwRjZzN29BTk9BX05MQ2dvRVF4XzNKVVQ1YmlZNmhvVHBJZVlyYUlJb252Zkg2REFLQkdfd1VCaFRLYWpuSdIBcEFVX3lxTE9Na0tlZ1NmX3ZpTmhjWjFKM2JaNjFoTW9WZmh0TFRVYXBfcHpEOUZ2QjZzUVpNQnZGTVRwZ3FFX05QTFJvX19nVVN4LXB3RnFDRnpuQUpEUzBtdnZLTWJhclVDVzh0aVZTU1pHVE95aDA?oc=5",
+      "published": "Thu, 14 Mar 2024 07:00:00 GMT"
+    },
+    {
+      "title": "“역사상 이런 상승은 없었다” 반도체 ETF SOXX·SMH, 역대 최고의 달···랠리 뒤엔 ‘진짜 AI 수요’ - Benzinga",
+      "url": "https://news.google.com/rss/articles/CBMi0AJBVV95cUxNeXVuZS1LWGxVTkl6SDhSQWtOeVN0R1VWc3FLdGdqaG54X2Q5d2lnU0o2X0Z6X0JqTG04Q3drOHljemJlcVRvNTVMbWNxTWhYNlhQelROYWtaeWZWa3BNUEU3RU5zVnQ1dktINE9GY3RSQmpMZm1yR0Vkc3pFRUZlSV9nRjFXOXp0cjVydV9WUnNzVU16WVc1VFdzUWp6MXh6eEZFbFlCNWJVSEprTFNPMklxMVU4T1RPZEtsdEkyVVBnSThQaWMzLTMyM2xSNVVld3BFOExNY3lpb3BOdnZKVnNoVTJZZE5ydjJsd3JVZUU2emNXNER3UThRTFVNQ1Bxc0R2MDVNT1RBSlUtbW1GQzM1OEN0M1JiRndmWGl1RmltV3dDbGdESVNLQ2d0WEhZRWQwYW0ySm1ablhrMWlwdUNpdEhOOVBnUUh2cDRrODg?oc=5",
+      "published": "Sat, 02 May 2026 07:00:00 GMT"
     }
   ]
 }
