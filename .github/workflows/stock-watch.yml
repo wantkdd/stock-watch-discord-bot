@@ -2,24 +2,13 @@ name: Korean Stock Watch Discord Bot
 
 on:
   workflow_dispatch:
-    inputs:
-      mode:
-        description: morning or watch
-        required: true
-        default: watch
-        type: choice
-        options:
-          - morning
-          - watch
   schedule:
-    # 08:43 KST Mon-Fri = 23:43 UTC Sun-Thu: LLM morning review.
-    # Avoid exact :00/:05/:40 slots because GitHub scheduled workflows can be delayed under load.
-    - cron: '43 23 * * 0-4'
     # Korean regular session watch: hourly from 09:00 to 15:00 KST.
+    # Each alert includes the current price checklist plus Gemini overall review when configured.
     - cron: '0 0-6 * * 1-5'
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: stock-watch-${{ github.ref }}
@@ -35,38 +24,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Decide run mode
-        id: mode
-        shell: bash
-        run: |
-          mode="${{ github.event.inputs.mode }}"
-          if [[ -z "$mode" ]]; then
-            if [[ "${{ github.event.schedule }}" == "43 23 * * 0-4" || "${{ github.event.schedule }}" == "40 23 * * 0-4" ]]; then
-              mode="morning"
-            else
-              mode="watch"
-            fi
-          fi
-          echo "mode=$mode" >> "$GITHUB_OUTPUT"
-          echo "Mode: $mode"
-
       - name: Run stock watch
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          python tools/cloud_stock_watch.py --mode "${{ steps.mode.outputs.mode }}"
-
-      - name: Commit generated morning overlay/report
-        if: steps.mode.outputs.mode == 'morning'
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/morning-overlay.json data/morning-review-*.md || true
-          if git diff --cached --quiet; then
-            echo "No morning changes to commit"
-          else
-            git commit -m "Update morning stock watch overlay"
-            git push
-          fi
+          python tools/cloud_stock_watch.py --mode watch

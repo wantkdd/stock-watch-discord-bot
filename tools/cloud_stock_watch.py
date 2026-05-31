@@ -242,24 +242,15 @@ def evaluate(config: Dict[str,Any], quotes: Dict[str,Quote]) -> List[Dict[str,An
     return rows
 
 
-def load_overlay() -> Dict[str,Any]:
-    p=DATA/'morning-overlay.json'
-    if not p.exists(): return {}
-    try: data=json.loads(p.read_text())
-    except Exception: return {}
-    if data.get('date') != now_kst().date().isoformat(): return {}
-    return data
-
-
 def apply_overlay(results: List[Dict[str,Any]], overlay: Dict[str,Any]) -> List[Dict[str,Any]]:
     if not overlay: return results
     overrides=overlay.get('symbol_overrides',{}) if isinstance(overlay.get('symbol_overrides'),dict) else {}
     for r in results:
         if overlay.get('risk_mode') in {'risk_off','pause_all'} and r['signal']=='BUY_CANDIDATE':
-            r['signal']='WAIT'; r['notes'].append(f"LLM morning {overlay.get('risk_mode')}: new buys paused")
+            r['signal']='WAIT'; r['notes'].append(f"LLM {overlay.get('risk_mode')}: new buys paused")
         ov=overrides.get(r['symbol'],{}) if isinstance(overrides,dict) else {}
         if isinstance(ov,dict) and ov.get('disable_buy') and r['signal']=='BUY_CANDIDATE':
-            r['signal']='WAIT'; r['notes'].append('LLM morning disabled buy')
+            r['signal']='WAIT'; r['notes'].append('LLM disabled buy')
         for n in ov.get('notes',[]) if isinstance(ov,dict) and isinstance(ov.get('notes'),list) else []:
             r['notes'].append('LLM: '+str(n))
     return results
@@ -441,7 +432,7 @@ def gemini_review(api_key: str, market_json: str, headlines_json: str) -> Dict[s
 한국어로만 답하라. 너는 보수적인 한국장 반도체 매매 리스크 리뷰어다.
 아래 장중 현재가, 전일대비 추세, 기준가대비 위치, KOSPI/KOSDAQ 시장상황,
 SOXX/SMH 프록시 추세, 최신 헤드라인을 모두 함께 보고 091160, 381180 신규매수 허용 여부를 판단하라.
-아침 판단에 고정되지 말고 매 실행 시점의 현재가·시장상황·추세·뉴스를 다시 평가하라.
+이전 판단에 고정되지 말고 매 실행 시점의 현재가·시장상황·추세·뉴스를 다시 평가하라.
 자동주문/수익보장/강한 매수지시 금지. bullish해도 조건 완화 금지. 위험하면 disable_buy=true.
 반드시 JSON만 반환하라. 스키마:
 {{"risk_mode":"normal|caution|risk_off|pause_all","notes":["..."],"symbol_overrides":{{"091160":{{"disable_buy":false,"notes":[]}},"381180":{{"disable_buy":false,"notes":[]}}}},"summary":"짧은 결론"}}
@@ -475,55 +466,12 @@ SOXX/SMH 프록시 추세, 최신 헤드라인을 모두 함께 보고 091160, 3
     raise RuntimeError(f"Gemini failed after model fallbacks: {last_error}")
 
 
-def morning(webhook: str, api_key: str) -> int:
-    config=load_config(); quotes=fetch_quotes(config); results=evaluate(config,quotes)
-    headlines=latest_headlines()
-    context=build_market_context(config, quotes, results)
-    market_json=json.dumps(context, ensure_ascii=False)
-    headlines_json=json.dumps(headlines, ensure_ascii=False)
-    today=now_kst().date().isoformat()
-    overlay={"date":today,"risk_mode":"caution","notes":["Gemini key missing; headline-only fallback"],"symbol_overrides":{"091160":{"disable_buy":False,"notes":[]},"381180":{"disable_buy":False,"notes":[]}},"sources":headlines[:8]}
-    summary="Gemini API key missing: 가격감시는 계속, LLM 판단은 비활성."
-    if api_key:
-        try:
-            g=gemini_review(api_key, market_json, headlines_json)
-            notes=list(g.get('notes',[])[:5])
-            if g.get('_gemini_model'):
-                notes.insert(0, f"Gemini model: {g['_gemini_model']}")
-            overlay.update({"risk_mode":g.get('risk_mode','caution'),"notes":notes,"symbol_overrides":g.get('symbol_overrides', overlay['symbol_overrides']),"sources":headlines[:10]})
-            summary=str(g.get('summary',''))
-        except Exception as e:
-            overlay['notes'].insert(0, f"Gemini failed: {e}")
-            summary=f"Gemini 실패: {e}. 가격감시는 계속."
-    DATA.mkdir(exist_ok=True)
-    (DATA/'morning-overlay.json').write_text(json.dumps(overlay, ensure_ascii=False, indent=2)+"\n")
-    adjusted_results=apply_overlay(results, overlay)
-    checklist=discord_summary(adjusted_results)
-    md=DATA/f"morning-review-{today.replace('-','')}.md"
-    md.write_text(
-        f"# Morning LLM Review — {today}\n\n"
-        f"## 결론\n- risk_mode: {overlay['risk_mode']}\n- {summary}\n\n"
-        "## 현재가·시장·추세\n"
-        f"{market_context_summary(context)}\n\n"
-        "## 오늘 수동 가격 체크표\n"
-        f"{checklist}\n\n"
-        "## 메모\n"
-        + '\n'.join(f"- {n}" for n in overlay.get('notes',[]))
-        + "\n\n## 주요 헤드라인\n"
-        + '\n'.join(f"- [{h['title']}]({h['url']})" for h in headlines[:12])
-        + "\n"
-    )
-    send_discord(webhook, f"Morning LLM Review — {today}", md.read_text(), 3447003)
-    send_discord(webhook, f"Morning Price Checklist — {today}", checklist, 3066993)
-    return 0
-
-
 def watch(webhook: str, api_key: str) -> int:
     config=load_config(); quotes=fetch_quotes(config); raw_results=evaluate(config,quotes)
     headlines=latest_headlines()
     context=build_market_context(config, quotes, raw_results)
-    intraday_notes=["Intraday news RSS checked"]
-    intraday_overlay={"date":now_kst().date().isoformat(),"risk_mode":"normal","notes":intraday_notes,"symbol_overrides":{"091160":{"disable_buy":False,"notes":[]},"381180":{"disable_buy":False,"notes":[]}},"sources":headlines[:8]}
+    intraday_notes=["뉴스 RSS 확인 완료; Gemini key가 없으면 고정 규칙만 사용"]
+    intraday_overlay={"date":now_kst().date().isoformat(),"risk_mode":"normal","summary":"Gemini API key missing: 고정 가격/리스크 규칙만 적용.","notes":intraday_notes,"symbol_overrides":{"091160":{"disable_buy":False,"notes":[]},"381180":{"disable_buy":False,"notes":[]}},"sources":headlines[:8]}
     if api_key:
         market_json=json.dumps(context, ensure_ascii=False)
         headlines_json=json.dumps(headlines, ensure_ascii=False)
@@ -532,23 +480,24 @@ def watch(webhook: str, api_key: str) -> int:
             intraday_notes=list(g.get('notes',[])[:4])
             if g.get('_gemini_model'):
                 intraday_notes.insert(0, f"Gemini model: {g['_gemini_model']}")
-            intraday_overlay.update({"risk_mode":g.get('risk_mode','caution'),"notes":intraday_notes,"symbol_overrides":g.get('symbol_overrides', intraday_overlay['symbol_overrides'])})
+            intraday_overlay.update({"risk_mode":g.get('risk_mode','caution'),"summary":str(g.get('summary','')),"notes":intraday_notes,"symbol_overrides":g.get('symbol_overrides', intraday_overlay['symbol_overrides'])})
         except Exception as e:
             intraday_notes.insert(0, f"Intraday Gemini failed: {e}")
             intraday_overlay["risk_mode"]="caution"
+            intraday_overlay["summary"]=f"Gemini 총평 실패: {e}. 고정 가격/리스크 규칙은 계속 적용."
             intraday_overlay["notes"]=intraday_notes
-    morning_overlay=load_overlay()
-    results=apply_overlay(raw_results, morning_overlay)
-    results=apply_overlay(results, intraday_overlay)
+    results=apply_overlay(raw_results, intraday_overlay)
     DATA.mkdir(exist_ok=True)
     report=DATA/f"daily-signal-{now_kst().strftime('%Y%m%d-%H%M')}.json"
     report.write_text(json.dumps(results, ensure_ascii=False, indent=2)+"\n")
     news_block=headline_summary(headlines)
-    llm_block='; '.join(intraday_overlay.get('notes',[])[:3]) or '-'
+    llm_summary=str(intraday_overlay.get('summary') or '-')
+    llm_notes='; '.join(intraday_overlay.get('notes',[])[:3]) or '-'
     desc=(
         f"{discord_summary(results)}\n\n"
         f"**현재가·시장·추세**\n{market_context_summary(context)}\n\n"
-        f"**실시간 뉴스/LLM 체크** risk_mode `{intraday_overlay.get('risk_mode','normal')}`\n> {llm_block}\n{news_block}"
+        f"**LLM 총평** risk_mode `{intraday_overlay.get('risk_mode','normal')}`\n> {llm_summary}\n> {llm_notes}\n\n"
+        f"**실시간 뉴스**\n{news_block}"
     )
     send_discord(webhook, f"Stock Watch — {now_kst().strftime('%Y-%m-%d %H:%M KST')}", desc)
     return 0
@@ -556,13 +505,13 @@ def watch(webhook: str, api_key: str) -> int:
 
 def main() -> int:
     ap=argparse.ArgumentParser()
-    ap.add_argument('--mode', choices=['morning','watch'], default=os.environ.get('RUN_MODE','watch'))
+    ap.add_argument('--mode', choices=['watch'], default='watch')
     ap.add_argument('--discord-webhook', default=os.environ.get('DISCORD_WEBHOOK_URL',''))
     ap.add_argument('--gemini-api-key', default=os.environ.get('GEMINI_API_KEY',''))
     args=ap.parse_args()
     if not args.discord_webhook:
         print('DISCORD_WEBHOOK_URL missing', file=sys.stderr); return 1
-    return morning(args.discord_webhook, args.gemini_api_key) if args.mode=='morning' else watch(args.discord_webhook, args.gemini_api_key)
+    return watch(args.discord_webhook, args.gemini_api_key)
 
 if __name__ == '__main__':
     raise SystemExit(main())

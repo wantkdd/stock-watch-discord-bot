@@ -7,20 +7,19 @@ Public GitHub Actions version of a no-order Korean stock watch bot.
 - Sends Discord alerts for Korean-market stock/ETF watch conditions.
 - Runs without your Mac being on.
 - Uses GitHub Actions public-repository runners.
-- Optional Gemini API free-tier key for an 08:40 KST morning LLM risk review.
+- Optional Gemini API free-tier key for an LLM overall review inside each scheduled alert.
 - Never places orders, never logs into a broker, never reads brokerage credentials.
 
 ## Schedule, Korea time
 
-- 08:43 — Gemini LLM morning review + same-message price checklist.
-- 09:00–15:00 — every hour during KR market.
+- 09:00–15:00 — every hour during KR market; each alert includes the price checklist and Gemini overall review when configured.
 
 GitHub scheduled workflows can be delayed by runner availability. The workflow
-therefore may occasionally arrive a few minutes late. The morning
-LLM message also includes the concrete “what/price/size” checklist. Intraday
-watch alerts include current price, day-change trend, KOSPI/KOSDAQ context,
-SOXX/SMH risk-proxy trend, current Google News RSS headlines, and, when
-`GEMINI_API_KEY` is configured, the same conservative LLM risk check before sending.
+therefore may occasionally arrive a few minutes late. Each hourly watch alert
+includes the concrete “what/price/size” checklist, current price, day-change
+trend, KOSPI/KOSDAQ context, SOXX/SMH risk-proxy trend, current Google News RSS
+headlines, and, when `GEMINI_API_KEY` is configured, a conservative LLM overall
+review before sending.
 
 GitHub Actions cron is UTC, so the workflow file stores converted UTC schedules.
 
@@ -34,11 +33,11 @@ Repository Settings → Secrets and variables → Actions → New repository sec
 
 - `GEMINI_API_KEY`: Google AI Studio / Gemini API key.
 
-If `GEMINI_API_KEY` is missing or Gemini fails, the bot still sends price-condition alerts. The LLM morning review falls back to a conservative headline-only message.
+If `GEMINI_API_KEY` is missing or Gemini fails, the bot still sends price-condition alerts. The LLM section falls back to fixed-rule/news context only.
 
 ## Why Gemini is OK here
 
-Gemini does **not** decide trades alone. It only creates a morning risk overlay:
+Gemini does **not** decide trades alone. Inside each hourly alert, it only creates a conservative risk/summary overlay:
 
 - can add caution notes;
 - can pause new buys if news/risk is bad;
@@ -57,7 +56,7 @@ The actual intraday watch uses fixed risk rules from `config/stock-watch-config.
 
 ## Manual test
 
-Actions tab → Korean Stock Watch Discord Bot → Run workflow → choose `morning` or `watch`.
+Actions tab → Korean Stock Watch Discord Bot → Run workflow. It runs `watch` mode only.
 
 ## Safety
 
